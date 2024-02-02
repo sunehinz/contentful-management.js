@@ -12,7 +12,6 @@ import {
   GetSnapshotForEntryParams,
   GetSpaceEnvAliasParams,
   GetSpaceEnvironmentParams,
-  GetSpaceMembershipProps,
   GetSpaceParams,
   GetTagParams,
   GetTeamMembershipParams,
@@ -78,9 +77,6 @@ import {
   CreateUpdateScheduledActionProps,
 } from '../entities/scheduled-action'
 import { SnapshotProps } from '../entities/snapshot'
-import { SpaceProps } from '../entities/space'
-import { SpaceMemberProps } from '../entities/space-member'
-import { CreateSpaceMembershipProps, SpaceMembershipProps } from '../entities/space-membership'
 import { CreateTagProps, DeleteTagParams, TagProps, UpdateTagProps } from '../entities/tag'
 import { CreateTeamProps, TeamProps } from '../entities/team'
 import { CreateTeamMembershipProps, TeamMembershipProps } from '../entities/team-membership'
@@ -164,6 +160,9 @@ import { AppSigningSecretPlainClientAPI } from './entities/app-signing-secret'
 import { ExtensionPlainClientAPI } from './entities/extension'
 import { AppEventSubscriptionPlainClientAPI } from './entities/app-event-subscription'
 import { AppKeyPlainClientAPI } from './entities/app-key'
+import { SpacePlainClientAPI } from './entities/space'
+import { SpaceMembershipPlainClientAPI } from './entities/space-membership'
+import { SpaceMemberPlainClientAPI } from './entities/space-member'
 
 export type PlainClientAPI = {
   raw: {
@@ -189,24 +188,7 @@ export type PlainClientAPI = {
     ): Promise<CollectionProp<FunctionProps>>
   }
   editorInterface: EditorInterfacePlainClientAPI
-  space: {
-    get(params: OptionalDefaults<GetSpaceParams>): Promise<SpaceProps>
-    getMany(params: OptionalDefaults<QueryParams>): Promise<CollectionProp<SpaceProps>>
-    getManyForOrganization(
-      params: OptionalDefaults<GetOrganizationParams & QueryParams>
-    ): Promise<CollectionProp<SpaceProps>>
-    create(
-      params: OptionalDefaults<{ organizationId?: string }>,
-      payload: Omit<SpaceProps, 'sys'>,
-      headers?: RawAxiosRequestHeaders
-    ): Promise<any>
-    update(
-      params: OptionalDefaults<GetSpaceParams>,
-      payload: SpaceProps,
-      headers?: RawAxiosRequestHeaders
-    ): Promise<SpaceProps>
-    delete(params: OptionalDefaults<GetSpaceParams>): Promise<any>
-  }
+  space: SpacePlainClientAPI
   environment: {
     get(params: OptionalDefaults<GetSpaceEnvironmentParams>): Promise<EnvironmentProps>
     getMany(
@@ -765,42 +747,8 @@ export type PlainClientAPI = {
     ): Promise<OrganizationMembershipProps>
     delete(params: OptionalDefaults<GetOrganizationMembershipParams>): Promise<any>
   }
-  spaceMember: {
-    get(
-      params: OptionalDefaults<GetSpaceParams & { spaceMemberId: string }>
-    ): Promise<SpaceMemberProps>
-    getMany(
-      params: OptionalDefaults<GetSpaceParams & QueryParams>
-    ): Promise<CollectionProp<SpaceMemberProps>>
-  }
-  spaceMembership: {
-    get(params: OptionalDefaults<GetSpaceMembershipProps>): Promise<SpaceMembershipProps>
-    getMany(
-      params: OptionalDefaults<GetSpaceParams & QueryParams>
-    ): Promise<CollectionProp<SpaceMembershipProps>>
-    getForOrganization(
-      params: OptionalDefaults<GetOrganizationParams & { spaceMembershipId: string }>
-    ): Promise<SpaceMembershipProps>
-    getManyForOrganization(
-      params: OptionalDefaults<GetOrganizationParams & QueryParams>
-    ): Promise<CollectionProp<SpaceMembershipProps>>
-    create(
-      params: OptionalDefaults<GetSpaceParams>,
-      data: CreateSpaceMembershipProps,
-      headers?: RawAxiosRequestHeaders
-    ): Promise<SpaceMembershipProps>
-    createWithId(
-      params: OptionalDefaults<GetSpaceMembershipProps>,
-      data: CreateSpaceMembershipProps,
-      headers?: RawAxiosRequestHeaders
-    ): Promise<SpaceMembershipProps>
-    update(
-      params: OptionalDefaults<GetSpaceMembershipProps>,
-      rawData: SpaceMembershipProps,
-      headers?: RawAxiosRequestHeaders
-    ): Promise<SpaceMembershipProps>
-    delete(params: OptionalDefaults<GetSpaceMembershipProps>): Promise<any>
-  }
+  spaceMember: SpaceMemberPlainClientAPI
+  spaceMembership: SpaceMembershipPlainClientAPI
   task: {
     get(params: OptionalDefaults<GetTaskParams>): Promise<TaskProps>
     getMany(
